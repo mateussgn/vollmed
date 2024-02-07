@@ -1,6 +1,9 @@
 package med.vol.api.controller;
 
 import med.vol.api.paciente.DadosCadastroPaciente;
+import med.vol.api.paciente.Paciente;
+import med.vol.api.paciente.PacienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/pacientes")
 public class PacienteController {
 
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
     @PostMapping
-    public void cadastrar(@RequestBody DadosCadastroPaciente dados) {
-        System.out.println(dados);
+    public void cadastrar(@RequestBody DadosCadastroPaciente dadosCadastroPaciente) {
+        pacienteRepository.save(new Paciente(dadosCadastroPaciente));
     }
 }
