@@ -1,9 +1,9 @@
 package med.vol.api.controller;
 
 import jakarta.validation.Valid;
-import med.vol.api.medico.DadosCadastroMedico;
-import med.vol.api.medico.Medico;
-import med.vol.api.medico.MedicoRepository;
+import med.vol.api.domain.medico.DadosCadastroMedico;
+import med.vol.api.domain.medico.Medico;
+import med.vol.api.domain.medico.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
