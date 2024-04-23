@@ -1,6 +1,7 @@
 package med.vol.api.controller;
 
 import jakarta.validation.Valid;
+import med.vol.api.domain.paciente.dto.DadosAtualizarPaciente;
 import med.vol.api.domain.paciente.dto.DadosCadastroPaciente;
 import med.vol.api.domain.paciente.Paciente;
 import med.vol.api.domain.paciente.PacienteRepository;
@@ -28,5 +29,12 @@ public class PacienteController {
     @GetMapping
     public Page<DadosListagemPaciente> listar(@PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
         return pacienteRepository.findAll(pageable).map(DadosListagemPaciente::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void atulizar(@RequestBody @Valid DadosAtualizarPaciente dadosAtualizarPaciente) {
+        var paciente = pacienteRepository.getReferenceById(dadosAtualizarPaciente.id());
+        paciente.atualizarInformacoes(dadosAtualizarPaciente);
     }
 }
