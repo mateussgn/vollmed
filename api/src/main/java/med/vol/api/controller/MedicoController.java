@@ -1,6 +1,7 @@
 package med.vol.api.controller;
 
 import jakarta.validation.Valid;
+import med.vol.api.domain.medico.dto.DadosAtualizarMedico;
 import med.vol.api.domain.medico.dto.DadosCadastroMedico;
 import med.vol.api.domain.medico.Medico;
 import med.vol.api.domain.medico.MedicoRepository;
@@ -18,6 +19,7 @@ public class MedicoController {
 
     @Autowired
     private MedicoRepository medicoRepository;
+
     @PostMapping
     @Transactional
     public void cadastrar(@RequestBody @Valid DadosCadastroMedico dadosCadastroMedico) {
@@ -27,5 +29,12 @@ public class MedicoController {
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
         return medicoRepository.findAll(pageable).map(DadosListagemMedico::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void atualizar(@RequestBody @Valid DadosAtualizarMedico dadosAtualizarMedico) {
+        var medico = medicoRepository.getReferenceById(dadosAtualizarMedico.id());
+        medico.atualizarInformacoes(dadosAtualizarMedico);
     }
 }
