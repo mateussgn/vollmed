@@ -1,6 +1,7 @@
 package med.vol.api.controller;
 
 import jakarta.validation.Valid;
+import med.vol.api.domain.medico.dto.DadosDetalhamentoMedico;
 import med.vol.api.domain.paciente.dto.DadosAtualizarPaciente;
 import med.vol.api.domain.paciente.dto.DadosCadastroPaciente;
 import med.vol.api.domain.paciente.Paciente;
@@ -37,6 +38,12 @@ public class PacienteController {
         var page = pacienteRepository.findByAtivoTrue(pageable).map(DadosListagemPaciente::new);
 
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalhar(@PathVariable Long id) {
+        var paciente = pacienteRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoPaciente(paciente));
     }
 
     @PutMapping
