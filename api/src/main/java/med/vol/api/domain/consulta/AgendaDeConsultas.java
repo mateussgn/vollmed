@@ -1,6 +1,7 @@
 package med.vol.api.domain.consulta;
 
 import med.vol.api.domain.consulta.dto.DadosAgendamentoConsulta;
+import med.vol.api.domain.consulta.dto.DadosCancelamentoConsulta;
 import med.vol.api.domain.exception.ValidacaoException;
 import med.vol.api.domain.medico.Medico;
 import med.vol.api.domain.medico.MedicoRepository;
@@ -31,8 +32,17 @@ public class AgendaDeConsultas {
 
         var medico = escolherMedico(dadosAgendamentoConsulta);
         var paciente = pacienteRepository.getReferenceById(dadosAgendamentoConsulta.idPaciente());
-        var consulta = new Consulta(null, medico, paciente, dadosAgendamentoConsulta.data());
+        var consulta = new Consulta(null, medico, paciente, dadosAgendamentoConsulta.data(), null);
         consultaRepository.save(consulta);
+    }
+
+    public void cancelar(DadosCancelamentoConsulta dadosCancelamentoConsulta) {
+        if (consultaRepository.existsById(dadosCancelamentoConsulta.idConsulta())) {
+            throw new ValidacaoException("Id da consulta informado não existe");
+        }
+
+        var consulta = consultaRepository.getReferenceById(dadosCancelamentoConsulta.idConsulta());
+        consulta.cancelar(dadosCancelamentoConsulta.motivo());
     }
 
     private Medico escolherMedico(DadosAgendamentoConsulta dadosAgendamentoConsulta) {
