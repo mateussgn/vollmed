@@ -1,4 +1,4 @@
-package med.vol.api.domain.consulta.validacoes;
+package med.vol.api.domain.consulta.validacoes.agendamento;
 
 import med.vol.api.domain.consulta.ConsultaRepository;
 import med.vol.api.domain.consulta.dto.DadosAgendamentoConsulta;
@@ -14,7 +14,7 @@ public class ValidadorMedicoComOutraConsultaNoMesmoHorario implements ValidadorA
 
     public void validar(DadosAgendamentoConsulta dadosAgendamentoConsulta) {
         var MedicoPossuiOutraConsultaNoMesmoHorario =
-                consultaRepository.existsByMedicoIdAndData(
+                consultaRepository.existsByMedicoIdAndDataAndMotivoCancelamentoIsNull(
                         dadosAgendamentoConsulta.idMedico(), dadosAgendamentoConsulta.data());
 
         if (MedicoPossuiOutraConsultaNoMesmoHorario) {
