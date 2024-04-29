@@ -2,6 +2,7 @@ package med.vol.api.domain.consulta;
 
 import med.vol.api.domain.consulta.dto.DadosAgendamentoConsulta;
 import med.vol.api.domain.consulta.dto.DadosCancelamentoConsulta;
+import med.vol.api.domain.consulta.dto.DadosDetalhamentoConsulta;
 import med.vol.api.domain.consulta.validacoes.ValidadorAgendamentoDeConsulta;
 import med.vol.api.domain.exception.ValidacaoException;
 import med.vol.api.domain.medico.Medico;
@@ -27,9 +28,9 @@ public class AgendaDeConsultas {
     @Autowired
     List<ValidadorAgendamentoDeConsulta> validadores;
 
-    public void agendar(DadosAgendamentoConsulta dadosAgendamentoConsulta) {
+    public DadosDetalhamentoConsulta agendar(DadosAgendamentoConsulta dadosAgendamentoConsulta) {
 
-        if (!pacienteRepository.existsById(dadosAgendamentoConsulta.idMedico())) {
+        if (!pacienteRepository.existsById(dadosAgendamentoConsulta.idPaciente())) {
             throw new ValidacaoException("Id do paciente informado não existe");
         }
         if (dadosAgendamentoConsulta.idMedico() != null && !medicoRepository.existsById(dadosAgendamentoConsulta.idMedico())) {
@@ -39,9 +40,16 @@ public class AgendaDeConsultas {
         validadores.forEach(validador -> validador.validar(dadosAgendamentoConsulta));
 
         var medico = escolherMedico(dadosAgendamentoConsulta);
+
+        if (medico == null) {
+            throw new ValidacaoException("Não existe médico disponível nessa data");
+        }
+
         var paciente = pacienteRepository.getReferenceById(dadosAgendamentoConsulta.idPaciente());
         var consulta = new Consulta(null, medico, paciente, dadosAgendamentoConsulta.data(), null);
         consultaRepository.save(consulta);
+
+        return new DadosDetalhamentoConsulta(consulta);
     }
 
     public void cancelar(DadosCancelamentoConsulta dadosCancelamentoConsulta) {
