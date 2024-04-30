@@ -15,3 +15,8 @@ Project developed based on the Alura Spring Boot Course
 - Configure password hashing using the BCrypt algorithm.
 - Application of filters to intercept requests, verify if the JWT token is included, and log the user.
 - For each request, we need to authenticate the user to Spring due to the stateless concept.
+- Implemented Unit Tests
+- Implemented personalized queries to get data from the database
+- Applied Strategy Design Pattern
+- Documented the REST API with Spring Doc
+- Build the Maven Project
